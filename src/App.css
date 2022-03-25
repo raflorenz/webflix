@@ -10,3 +10,8 @@ body {
 .app {
   text-align: center;
 }
+
+ul {
+  column-count: 8;
+  text-align: left;
+}
