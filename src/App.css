@@ -11,7 +11,23 @@ body {
   text-align: center;
 }
 
-ul {
-  column-count: 8;
-  text-align: left;
+.heading {
+  margin: 35px 0 40px;
+  font-size: 3em;
+  color: #e50914;
+  text-transform: uppercase;
+}
+
+.movies {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.movie {
+  width: 9%;
+}
+
+.movie p {
+  font-size: 18px;
 }
