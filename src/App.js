@@ -17,7 +17,7 @@ function App() {
 
   return (
     <div className="app">
-      <h1 className="heading">Topflix</h1>
+      <h1 className="heading">Webflix</h1>
       <Movies movies={movies} />
     </div>
   );
