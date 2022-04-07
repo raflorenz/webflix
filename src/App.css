@@ -31,3 +31,12 @@ body {
 .movie p {
   font-size: 18px;
 }
+
+.movie-details {
+  height: 0;
+  overflow: hidden;
+}
+
+.movie.is-active .movie-details {
+  height: auto;
+}
