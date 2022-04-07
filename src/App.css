@@ -25,11 +25,41 @@ body {
 }
 
 .movie {
-  width: 9%;
+  width: 10%;
+  margin-bottom: 30px;
+}
+
+.movie-front {
+  position: relative;
+}
+
+.movie img {
+  width: 80%;
 }
 
 .movie p {
   font-size: 18px;
+}
+
+.movie span {
+  display: inline-block;
+  position: absolute;
+  padding: 3px;
+  border-radius: 3px;
+  background-color: #e50914;
+  font-size: 12px;
+  line-height: 1;
+  color: #fff;
+}
+
+.movie-release-date {
+  top: 10px;
+  left: 30px;
+}
+
+.movie-category {
+  bottom: 15px;
+  right: 30px;
 }
 
 .movie-details {
