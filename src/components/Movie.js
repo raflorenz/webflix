@@ -8,7 +8,7 @@ function Movie({ movie, clickHandler, activeMovie }) {
             </div>
             <div className="movie-details">
                 <h3>{movie['im:name']['label']}</h3>
-                <p>{movie['summary']['label']}</p>
+                <p>{movie['summary'] && movie['summary']['label']}</p>
             </div>
         </div>
     );

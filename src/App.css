@@ -63,10 +63,14 @@ body {
 }
 
 .movie-details {
+  width: calc(1000% - 50px);
   height: 0;
   overflow: hidden;
+  background-color: #222;
+  color: #fff;
 }
 
 .movie.is-active .movie-details {
   height: auto;
+  padding: 25px;
 }
