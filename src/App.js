@@ -4,8 +4,8 @@ import FeaturedMovie from './components/FeaturedMovie'
 import './App.css'
 
 function App() {
-  const [movies, setMovies] = useState([]);
-  const [limit, setLimit] = useState(20);
+  const [movies, setMovies] = useState([])
+  const [limit, setLimit] = useState(20)
 
   useEffect(() => {
     // fetch('https://itunes.apple.com/us/rss/topmovies/limit=100/json').then(response => response.json()).then(data => console.log(data.feed.entry))
@@ -14,6 +14,11 @@ function App() {
       const data = await response.json();
 
       setMovies(data.feed.entry);
+
+      // scroll to bottom after clicking see all button
+      if (limit > 20) {
+        document.body.scrollIntoView({behavior: 'smooth', block: 'end'})
+      }
     })();
   }, [limit]);
 
