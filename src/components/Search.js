@@ -30,7 +30,7 @@ function Search() {
             {searchResults.map(searchResult => (
                 <div key={searchResult['im:name']['label']} onClick={() => searchResultClicked(searchResult['link'][0]['attributes']['href'])}>{searchResult['im:name']['label']}</div>
             ))}
-            {(searchResults.length === 0 && query > 0) && <div>No result</div>}
+            {(searchResults.length === 0 && query.length > 1) && <div>No result</div>}
         </div>
     </div>
   );
