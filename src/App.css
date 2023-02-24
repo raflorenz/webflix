@@ -201,17 +201,64 @@ body {
 
 .movie-details {
   position: fixed;
-  bottom: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
   z-index: 9;
-  width: calc(100% - 50px);
-  height: 0;
+  width: 50%;
+  padding: 40px;
+  border-radius: 10px;
   overflow: hidden;
-  background-color: #222;
+  background: rgba(0,0,0,0.8);
   color: #fff;
+  text-align: left;
+  transform: translate(-50%, -50%);
 }
 
-.movie.is-active .movie-details {
-  height: auto;
-  padding: 25px;
+@media (max-width: 1024px) {
+  .movie-details {
+    width: 80%;
+  }
+}
+
+.movie-details video {
+  max-height: 400px;
+}
+
+.movie-details ul {
+  padding: 0;
+  margin-top: -15px;
+  margin-bottom: 25px;
+}
+
+.movie-details ul li {
+  display: inline-block;
+  margin-right: 15px;
+}
+
+.movie-details p {
+  margin-bottom: 0;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.movie-details a {
+  display: inline-block;
+  padding: 15px 20px;
+  margin-top: 30px;
+  border-radius: 5px;
+  background-color: #e50914;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 1;
+  color: #fff;
+  text-decoration: none;
+  transition: all .2s ease-in-out;
+}
+
+.movie-details a:hover {
+  background-color: #bd0912;
+}
+
+.movie-details a:focus {
+  box-shadow: 0 0 0 3px #8d060d;
 }
