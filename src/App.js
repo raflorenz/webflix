@@ -7,6 +7,7 @@ import './App.css'
 function App() {
   const [movies, setMovies] = useState([])
   const [limit, setLimit] = useState(20)
+  const [previewPlaying, setPreviewPlaying] = useState(true)
 
   useEffect(() => {
     (async function fetchMovies() {
@@ -26,9 +27,9 @@ function App() {
     <div className="app">
       <h1 className="heading">Webflix</h1>
       <Search />
-      <FeaturedMovie movies={movies} />
+      <FeaturedMovie movies={movies} previewPlaying={previewPlaying} />
       <h2>Popular Movies {limit === 20 && <span onClick={() => setLimit(100)}>See All</span>}</h2>
-      <Movies movies={movies} />
+      <Movies movies={movies} togglePreview={() => setPreviewPlaying(!previewPlaying)} />
     </div>
   );
 }

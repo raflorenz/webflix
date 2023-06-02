@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import ReactPlayer from 'react-player'
 
-function FeaturedMovie({ movies }) {
+function FeaturedMovie({ movies, previewPlaying }) {
     const [index, setIndex] = useState(0)
     const featuredMovie = movies[index]
 
@@ -9,14 +9,14 @@ function FeaturedMovie({ movies }) {
         const interval = setInterval(() => {
             const randomNumber = Math.floor(Math.random() * ((movies.length - 1) - 0)) + 0
             setIndex(randomNumber)
-        }, 30000);
+        }, 20000);
 
         return () => clearInterval(interval);
     }, [movies])
-    
+
     return (
         <section className="featured-movie">
-            <ReactPlayer url={featuredMovie && featuredMovie['link'][1]['attributes']['href']} playing muted width="100%" height="750px" />
+            <ReactPlayer url={featuredMovie && featuredMovie['link'][1]['attributes']['href']} playing={previewPlaying} muted width="100%" height="750px" />
             <div className="featured-movie-content">
                 <h1 className="featured-movie-title">{featuredMovie && featuredMovie['im:name']['label']}</h1>
                 <ul className="featured-movie-list">
