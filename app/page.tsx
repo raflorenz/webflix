@@ -1,3 +1,5 @@
+import Movie from "@/components/movie";
+
 export default async function Home() {
   const options = {
     method: "GET",
@@ -23,20 +25,20 @@ export default async function Home() {
     .catch((err) => console.error(err));
 
   return (
-    <div className="app">
-      <h1 className="heading">Webflix</h1>
+    <div className="container mx-auto px-8">
+      <h1 className="brand">Webflix</h1>
 
-      <div className="mb-8">
-        <h2>Popular Movies</h2>
+      <h2 className="heading">Popular Movies</h2>
+      <div className="movies">
         {popularMovies.results.map((movie) => (
-          <h3 key={movie.id}>{movie.title}</h3>
+          <Movie key={movie.id} movie={movie} />
         ))}
       </div>
 
-      <div>
-        <h2>Top Rated Movies</h2>
+      <h2 className="heading">Top Rated Movies</h2>
+      <div className="movies">
         {topRatedMovies.results.map((movie) => (
-          <h3 key={movie.id}>{movie.title}</h3>
+          <Movie key={movie.id} movie={movie} />
         ))}
       </div>
     </div>

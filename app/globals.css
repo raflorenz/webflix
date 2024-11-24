@@ -11,12 +11,52 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.heading {
-  position: absolute;
-  left: 5%;
-  z-index: 9;
-  margin: 35px 0 40px;
+.brand {
+  margin: 30px 0;
   font-size: 3em;
   color: #e50914;
   text-transform: uppercase;
+}
+
+.heading {
+  margin: 50px 0 25px;
+  font-size: 2.2em;
+  color: #e50914;
+  text-transform: uppercase;
+}
+
+.movies {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: minmax(175px, auto);
+  gap: 7px;
+}
+
+.movie-front {
+  position: relative;
+}
+
+.movie p {
+  font-size: 18px;
+}
+
+.movie span {
+  display: inline-block;
+  position: absolute;
+  padding: 3px;
+  border-radius: 3px;
+  background-color: #e50914;
+  font-size: 12px;
+  line-height: 1;
+  color: #fff;
+}
+
+.movie-release-date {
+  top: 10px;
+  right: 10px;
+}
+
+.movie-category {
+  bottom: 10px;
+  left: 10px;
 }
