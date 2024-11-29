@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-.media > div {
+.media-list {
+  @apply cursor-grab active:cursor-grabbing
+        [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar]:rounded-full
+      [&::-webkit-scrollbar-track]:bg-gray-300 [&::-webkit-scrollbar-track]:rounded-full
+      [&::-webkit-scrollbar-thumb]:bg-red-500 [&::-webkit-scrollbar-thumb]:rounded-full
+        [&::-webkit-scrollbar-thumb]:border [&::-webkit-scrollbar-thumb]:border-gray-100;
+}
+
+.media > .info {
   @apply absolute p-1 rounded bg-[#e50914] font-medium text-xs leading-none text-white;
 }
