@@ -24,13 +24,33 @@ export async function getTrending() {
 }
 
 export async function getPopular() {
-  const data = await fetchMedia("/movie/popular?language=en-US&page=1");
+  const movieData = await fetchMedia("/movie/popular?language=en-US&page=1");
+  const tvData = await fetchMedia("/tv/popular?language=en-US&page=1");
 
-  return data.results;
+  return [...movieData.results, ...tvData.results].sort(
+    (a, b) => b.popularity - a.popularity
+  );
 }
 
 export async function getTopRated() {
-  const data = await fetchMedia("/movie/top_rated?language=en-US&page=1");
+  const movieData = await fetchMedia("/movie/top_rated?language=en-US&page=1");
+  const tvData = await fetchMedia("/tv/top_rated?language=en-US&page=1");
 
-  return data.results;
+  // custom sorting function
+  const sortMedia = (a, b) => {
+    // first, compare by vote average (highest rated first)
+    if (b.vote_average.toFixed(1) !== a.vote_average.toFixed(1)) {
+      return b.vote_average - a.vote_average;
+    }
+
+    // if vote average is the same, compare by date (oldest date first)
+    const dateA = a.release_date || a.first_air_date;
+    const dateB = b.release_date || b.first_air_date;
+
+    if (dateA && dateB) {
+      return new Date(dateA).getTime() - new Date(dateB).getTime();
+    }
+  };
+
+  return [...movieData.results, ...tvData.results].sort(sortMedia);
 }
