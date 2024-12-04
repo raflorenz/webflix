@@ -12,18 +12,12 @@ export default function Media({ media }) {
         <span>{media.vote_average ? media.vote_average.toFixed(1) : "NR"}</span>
       </div>
       <div className="info top-2 right-2">
-        {media.media_type === "tv" ? (
-          <TvMinimal size={16} />
-        ) : (
-          <Film size={16} />
-        )}
+        {media.release_date ? <Film size={16} /> : <TvMinimal size={16} />}
       </div>
       <div className="info bottom-2 left-2">
         {formatDate(media.release_date || media.first_air_date)}
         {media.first_air_date &&
-          ` - ${
-            media.last_air_date ? formatDate(media.last_air_date) : "Present"
-          }`}
+          (media.status === "Ended" ? " (Ended)" : " (Ongoing)")}
       </div>
     </div>
   );

@@ -16,25 +16,74 @@ async function fetchMedia(endpoint: string) {
   return response.json();
 }
 
+export async function getTVShowDetails(id: number) {
+  try {
+    const data = await fetchMedia(`/tv/${id}`);
+    return {
+      status: data.status || null,
+    };
+  } catch (error) {
+    console.error(`Error fetching TV show details for ID ${id}:`, error);
+    return { status: null };
+  }
+}
+
 export async function getTrending() {
   const page1Data = await fetchMedia("/trending/all/day?language=en-US&page=1");
   const page2Data = await fetchMedia("/trending/all/day?language=en-US&page=2");
 
-  return [...page1Data.results, ...page2Data.results];
+  // Fetch additional details for TV shows
+  const updatedResults = await Promise.all(
+    [...page1Data.results, ...page2Data.results].map(async (item) => {
+      if (item.first_air_date) {
+        const { status } = await getTVShowDetails(item.id);
+
+        return { ...item, status };
+      }
+
+      return item;
+    })
+  );
+
+  return updatedResults;
 }
 
 export async function getPopular() {
   const movieData = await fetchMedia("/movie/popular?language=en-US&page=1");
   const tvData = await fetchMedia("/tv/popular?language=en-US&page=1");
 
-  return [...movieData.results, ...tvData.results].sort(
-    (a, b) => b.popularity - a.popularity
+  // Fetch additional details for TV shows
+  const updatedResults = await Promise.all(
+    [...movieData.results, ...tvData.results].map(async (item) => {
+      if (item.first_air_date) {
+        const { status } = await getTVShowDetails(item.id);
+
+        return { ...item, status };
+      }
+
+      return item;
+    })
   );
+
+  return updatedResults.sort((a, b) => b.popularity - a.popularity);
 }
 
 export async function getTopRated() {
   const movieData = await fetchMedia("/movie/top_rated?language=en-US&page=1");
   const tvData = await fetchMedia("/tv/top_rated?language=en-US&page=1");
+
+  // Fetch additional details for TV shows
+  const updatedResults = await Promise.all(
+    [...movieData.results, ...tvData.results].map(async (item) => {
+      if (item.first_air_date) {
+        const { status } = await getTVShowDetails(item.id);
+
+        return { ...item, status };
+      }
+
+      return item;
+    })
+  );
 
   // custom sorting function
   const sortMedia = (a, b) => {
@@ -52,5 +101,5 @@ export async function getTopRated() {
     }
   };
 
-  return [...movieData.results, ...tvData.results].sort(sortMedia);
+  return updatedResults.sort(sortMedia);
 }
