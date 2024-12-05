@@ -16,15 +16,28 @@ async function fetchMedia(endpoint: string) {
   return response.json();
 }
 
-export async function getTVShowDetails(id: number) {
+async function getMovieDetails(id: number) {
+  try {
+    const data = await fetchMedia(`/movie/${id}`);
+    return {
+      runtime: data.runtime || 0,
+    };
+  } catch (error) {
+    console.error(`Error fetching movie details for ID ${id}:`, error);
+    return { runtime: 0 };
+  }
+}
+
+async function getTVShowDetails(id: number) {
   try {
     const data = await fetchMedia(`/tv/${id}`);
     return {
       status: data.status || null,
+      episodes: data.number_of_episodes || null,
     };
   } catch (error) {
     console.error(`Error fetching TV show details for ID ${id}:`, error);
-    return { status: null };
+    return { status: null, episodes: null };
   }
 }
 
@@ -36,12 +49,14 @@ export async function getTrending() {
   const updatedResults = await Promise.all(
     [...page1Data.results, ...page2Data.results].map(async (item) => {
       if (item.first_air_date) {
-        const { status } = await getTVShowDetails(item.id);
+        const { status, episodes } = await getTVShowDetails(item.id);
 
-        return { ...item, status };
+        return { ...item, status, episodes };
       }
 
-      return item;
+      const { runtime } = await getMovieDetails(item.id);
+
+      return { ...item, runtime };
     })
   );
 
@@ -56,12 +71,14 @@ export async function getPopular() {
   const updatedResults = await Promise.all(
     [...movieData.results, ...tvData.results].map(async (item) => {
       if (item.first_air_date) {
-        const { status } = await getTVShowDetails(item.id);
+        const { status, episodes } = await getTVShowDetails(item.id);
 
-        return { ...item, status };
+        return { ...item, status, episodes };
       }
 
-      return item;
+      const { runtime } = await getMovieDetails(item.id);
+
+      return { ...item, runtime };
     })
   );
 
@@ -76,12 +93,14 @@ export async function getTopRated() {
   const updatedResults = await Promise.all(
     [...movieData.results, ...tvData.results].map(async (item) => {
       if (item.first_air_date) {
-        const { status } = await getTVShowDetails(item.id);
+        const { status, episodes } = await getTVShowDetails(item.id);
 
-        return { ...item, status };
+        return { ...item, status, episodes };
       }
 
-      return item;
+      const { runtime } = await getMovieDetails(item.id);
+
+      return { ...item, runtime };
     })
   );
 

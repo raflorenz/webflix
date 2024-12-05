@@ -11,5 +11,5 @@
 }
 
 .media > .info {
-  @apply absolute p-1 rounded bg-[#e50914] font-medium text-xs leading-none text-white;
+  @apply absolute flex justify-center items-center h-[23px] p-1 rounded bg-[#e50914] font-medium text-xs leading-none text-white;
 }
