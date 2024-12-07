@@ -16,7 +16,7 @@ async function fetchMedia(endpoint: string) {
   return response.json();
 }
 
-async function getMovieDetails(id: number) {
+export async function getMovieDetails(id: number) {
   try {
     const data = await fetchMedia(`/movie/${id}`);
     return {
@@ -42,67 +42,49 @@ async function getTVShowDetails(id: number) {
 }
 
 export async function getTrending() {
-  const page1Data = await fetchMedia("/trending/all/day?language=en-US&page=1");
-  const page2Data = await fetchMedia("/trending/all/day?language=en-US&page=2");
+  const [page1Data, page2Data] = await Promise.all([
+    fetchMedia("/trending/all/day?language=en-US&page=1"),
+    fetchMedia("/trending/all/day?language=en-US&page=2"),
+  ]);
+
+  const allResults = [...page1Data.results, ...page2Data.results];
 
   // Fetch additional details for TV shows
-  const updatedResults = await Promise.all(
-    [...page1Data.results, ...page2Data.results].map(async (item) => {
-      if (item.first_air_date) {
-        const { status, episodes } = await getTVShowDetails(item.id);
+  // const updatedResults = await Promise.all(
+  //   allResults.map(async (item) => {
+  //     if (item.first_air_date) {
+  //       const { status, episodes } = await getTVShowDetails(item.id);
 
-        return { ...item, status, episodes };
-      }
+  //       return { ...item, status, episodes };
+  //     }
 
-      const { runtime } = await getMovieDetails(item.id);
+  //     const { runtime } = await getMovieDetails(item.id);
 
-      return { ...item, runtime };
-    })
-  );
+  //     return { ...item, runtime };
+  //   })
+  // );
 
-  return updatedResults;
+  return allResults;
 }
 
 export async function getPopular() {
-  const movieData = await fetchMedia("/movie/popular?language=en-US&page=1");
-  const tvData = await fetchMedia("/tv/popular?language=en-US&page=1");
+  const [movieData, tvData] = await Promise.all([
+    fetchMedia("/movie/popular?language=en-US&page=1"),
+    fetchMedia("/tv/popular?language=en-US&page=1"),
+  ]);
 
-  // Fetch additional details for TV shows
-  const updatedResults = await Promise.all(
-    [...movieData.results, ...tvData.results].map(async (item) => {
-      if (item.first_air_date) {
-        const { status, episodes } = await getTVShowDetails(item.id);
+  const allResults = [...movieData.results, ...tvData.results];
 
-        return { ...item, status, episodes };
-      }
-
-      const { runtime } = await getMovieDetails(item.id);
-
-      return { ...item, runtime };
-    })
-  );
-
-  return updatedResults.sort((a, b) => b.popularity - a.popularity);
+  return allResults.sort((a, b) => b.popularity - a.popularity);
 }
 
 export async function getTopRated() {
-  const movieData = await fetchMedia("/movie/top_rated?language=en-US&page=1");
-  const tvData = await fetchMedia("/tv/top_rated?language=en-US&page=1");
+  const [movieData, tvData] = await Promise.all([
+    fetchMedia("/movie/top_rated?language=en-US&page=1"),
+    fetchMedia("/tv/top_rated?language=en-US&page=1"),
+  ]);
 
-  // Fetch additional details for TV shows
-  const updatedResults = await Promise.all(
-    [...movieData.results, ...tvData.results].map(async (item) => {
-      if (item.first_air_date) {
-        const { status, episodes } = await getTVShowDetails(item.id);
-
-        return { ...item, status, episodes };
-      }
-
-      const { runtime } = await getMovieDetails(item.id);
-
-      return { ...item, runtime };
-    })
-  );
+  const allResults = [...movieData.results, ...tvData.results];
 
   // custom sorting function
   const sortMedia = (a, b) => {
@@ -120,5 +102,5 @@ export async function getTopRated() {
     }
   };
 
-  return updatedResults.sort(sortMedia);
+  return allResults.sort(sortMedia);
 }

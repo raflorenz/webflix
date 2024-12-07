@@ -1,3 +1,5 @@
+import { Suspense, use } from "react";
+import { getMovieDetails } from "@/lib/api";
 import { formatDate, formatRuntime } from "@/lib/utils";
 import { Star, Film, TvMinimal } from "lucide-react";
 
@@ -5,16 +7,16 @@ export default function Media({ media }) {
   return (
     <div className="media relative w-[200px] select-none">
       <div className="pointer-events-none">
-        <img src={`https://image.tmdb.org/t/p/w300${media.poster_path}`} />
+        <img src={`https://image.tmdb.org/t/p/w200${media.poster_path}`} />
       </div>
       <div className="info top-2 left-2">
         {media.release_date ? <Film size={15} /> : <TvMinimal size={15} />}
       </div>
-      <div className="info top-2 left-[2.2rem]">
+      {/* <div className="info top-2 left-[2.2rem]">
         {media.release_date
           ? formatRuntime(media.runtime)
           : `${media.episodes}ep`}
-      </div>
+      </div> */}
       <div className="info flex items-center gap-[3px] top-2 right-2">
         <Star size={15} />
         <span>
@@ -23,9 +25,22 @@ export default function Media({ media }) {
       </div>
       <div className="info bottom-2 left-2">
         {formatDate(media.release_date || media.first_air_date)}
-        {media.first_air_date &&
-          (media.status === "Ended" ? " (Ended)" : " (Ongoing)")}
+        {/* {media.first_air_date &&
+          (media.status === "Ended" ? " (Ended)" : " (Ongoing)")} */}
       </div>
+      <Suspense fallback={<div>...</div>}>
+        <AdditionalInfo mediaId={media.id} releaseDate={media.release_date} />
+      </Suspense>
+    </div>
+  );
+}
+
+function AdditionalInfo({ mediaId, releaseDate }) {
+  const { runtime } = use(getMovieDetails(mediaId));
+
+  return (
+    <div className="info top-2 left-[2.2rem]">
+      {releaseDate ? formatRuntime(runtime) : null}
     </div>
   );
 }
