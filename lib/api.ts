@@ -16,28 +16,17 @@ async function fetchMedia(endpoint: string) {
   return response.json();
 }
 
-export async function getMovieDetails(id: number) {
+export async function fetchMediaDetails(media) {
   try {
-    const data = await fetchMedia(`/movie/${id}`);
-    return {
-      runtime: data.runtime || 0,
-    };
-  } catch (error) {
-    console.error(`Error fetching movie details for ID ${id}:`, error);
-    return { runtime: 0 };
-  }
-}
+    const data = await fetchMedia(
+      `/${media.release_date ? "movie" : "tv"}/${media.id}`
+    );
 
-async function getTVShowDetails(id: number) {
-  try {
-    const data = await fetchMedia(`/tv/${id}`);
-    return {
-      status: data.status || null,
-      episodes: data.number_of_episodes || null,
-    };
+    return data;
   } catch (error) {
-    console.error(`Error fetching TV show details for ID ${id}:`, error);
-    return { status: null, episodes: null };
+    console.error(`Error fetching media details for ID ${media.id}:`, error);
+
+    return null;
   }
 }
 
@@ -48,21 +37,6 @@ export async function getTrending() {
   ]);
 
   const allResults = [...page1Data.results, ...page2Data.results];
-
-  // Fetch additional details for TV shows
-  // const updatedResults = await Promise.all(
-  //   allResults.map(async (item) => {
-  //     if (item.first_air_date) {
-  //       const { status, episodes } = await getTVShowDetails(item.id);
-
-  //       return { ...item, status, episodes };
-  //     }
-
-  //     const { runtime } = await getMovieDetails(item.id);
-
-  //     return { ...item, runtime };
-  //   })
-  // );
 
   return allResults;
 }
