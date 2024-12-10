@@ -1,4 +1,4 @@
-const API_KEY = process.env.TMDB_API_KEY;
+const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 
 const headers = {
@@ -17,48 +17,86 @@ async function fetchMedia(endpoint: string) {
 }
 
 export async function fetchMediaDetails(media) {
+  const mediaType = media.release_date ? "movie" : "tv";
+
   try {
-    const data = await fetchMedia(
-      `/${media.release_date ? "movie" : "tv"}/${media.id}`
-    );
+    const data = await fetchMedia(`/${mediaType}/${media.id}`);
 
     return data;
   } catch (error) {
     console.error(`Error fetching media details for ID ${media.id}:`, error);
 
-    return null;
+    throw error;
   }
 }
 
 export async function getTrending() {
-  const [page1Data, page2Data] = await Promise.all([
-    fetchMedia("/trending/all/day?language=en-US&page=1"),
-    fetchMedia("/trending/all/day?language=en-US&page=2"),
-  ]);
+  const data = await fetchMedia("/trending/all/day");
 
-  const allResults = [...page1Data.results, ...page2Data.results];
+  const updatedResults = await Promise.all(
+    data.results.map(async (item) => {
+      const { runtime, number_of_episodes, status } = await fetchMediaDetails(
+        item
+      );
 
-  return allResults;
+      return {
+        id: item.id,
+        media_type: item.media_type,
+        release_date: item.release_date,
+        first_air_date: item.first_air_date,
+        poster_path: item.poster_path,
+        vote_average: item.vote_average,
+        runtime,
+        number_of_episodes,
+        status,
+      };
+    })
+  );
+
+  return updatedResults;
 }
 
 export async function getPopular() {
-  const [movieData, tvData] = await Promise.all([
-    fetchMedia("/movie/popular?language=en-US&page=1"),
-    fetchMedia("/tv/popular?language=en-US&page=1"),
+  const [movies, tvShows] = await Promise.all([
+    fetchMedia("/movie/popular"),
+    fetchMedia("/tv/popular"),
   ]);
 
-  const allResults = [...movieData.results, ...tvData.results];
+  const combinedResults = [
+    ...movies.results.map((item) => ({ ...item, media_type: "movie" })),
+    ...tvShows.results.map((item) => ({ ...item, media_type: "tv" })),
+  ]
+    .sort((a, b) => b.popularity - a.popularity)
+    .slice(0, 20);
 
-  return allResults.sort((a, b) => b.popularity - a.popularity);
+  const updatedResults = await Promise.all(
+    combinedResults.map(async (item) => {
+      const { runtime, number_of_episodes, status } = await fetchMediaDetails(
+        item
+      );
+
+      return {
+        id: item.id,
+        media_type: item.media_type,
+        release_date: item.release_date,
+        first_air_date: item.first_air_date,
+        poster_path: item.poster_path,
+        vote_average: item.vote_average,
+        runtime,
+        number_of_episodes,
+        status,
+      };
+    })
+  );
+
+  return updatedResults;
 }
 
 export async function getTopRated() {
-  const [movieData, tvData] = await Promise.all([
-    fetchMedia("/movie/top_rated?language=en-US&page=1"),
-    fetchMedia("/tv/top_rated?language=en-US&page=1"),
+  const [movies, tvShows] = await Promise.all([
+    fetchMedia("/movie/top_rated"),
+    fetchMedia("/tv/top_rated"),
   ]);
-
-  const allResults = [...movieData.results, ...tvData.results];
 
   // custom sorting function
   const sortMedia = (a, b) => {
@@ -76,5 +114,32 @@ export async function getTopRated() {
     }
   };
 
-  return allResults.sort(sortMedia);
+  const combinedResults = [
+    ...movies.results.map((item) => ({ ...item, media_type: "movie" })),
+    ...tvShows.results.map((item) => ({ ...item, media_type: "tv" })),
+  ]
+    .sort(sortMedia)
+    .slice(0, 20);
+
+  const updatedResults = await Promise.all(
+    combinedResults.map(async (item) => {
+      const { runtime, number_of_episodes, status } = await fetchMediaDetails(
+        item
+      );
+
+      return {
+        id: item.id,
+        media_type: item.media_type,
+        release_date: item.release_date,
+        first_air_date: item.first_air_date,
+        poster_path: item.poster_path,
+        vote_average: item.vote_average,
+        runtime,
+        number_of_episodes,
+        status,
+      };
+    })
+  );
+
+  return updatedResults;
 }

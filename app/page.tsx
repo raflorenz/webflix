@@ -33,9 +33,9 @@ export default async function Home() {
 function MediaListSkeleton() {
   return (
     <div className="space-y-4">
-      <div className="grid grid-rows-1 grid-flow-col gap-2 pb-2 mb-16 overflow-x-auto">
-        {Array.from({ length: 7 }).map((_, index) => (
-          <Skeleton key={index} className="aspect-[2/3] w-[200px]" />
+      <div className="grid grid-rows-2 grid-flow-col gap-2 pb-2 mb-16 overflow-x-auto">
+        {Array.from({ length: 12 }).map((_, index) => (
+          <Skeleton key={index} className="aspect-[2/3] w-[235px]" />
         ))}
       </div>
     </div>
