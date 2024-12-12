@@ -16,7 +16,7 @@ async function fetchMedia(endpoint: string) {
   return response.json();
 }
 
-export async function fetchMediaDetails(media) {
+async function fetchMediaDetails(media) {
   const mediaType = media.release_date ? "movie" : "tv";
 
   try {
@@ -30,11 +30,9 @@ export async function fetchMediaDetails(media) {
   }
 }
 
-export async function getTrending() {
-  const data = await fetchMedia("/trending/all/day");
-
+async function generateUpdatedResults(results) {
   const updatedResults = await Promise.all(
-    data.results.map(async (item) => {
+    results.map(async (item) => {
       const { runtime, number_of_episodes, status } = await fetchMediaDetails(
         item
       );
@@ -56,6 +54,19 @@ export async function getTrending() {
   return updatedResults;
 }
 
+export async function getTrending() {
+  const [page1, page2] = await Promise.all([
+    fetchMedia("/trending/all/day?page=1"),
+    fetchMedia("/trending/all/day?page=2"),
+  ]);
+
+  const combinedResults = [...page1.results, ...page2.results];
+
+  const updatedResults = generateUpdatedResults(combinedResults);
+
+  return updatedResults;
+}
+
 export async function getPopular() {
   const [movies, tvShows] = await Promise.all([
     fetchMedia("/movie/popular"),
@@ -65,29 +76,9 @@ export async function getPopular() {
   const combinedResults = [
     ...movies.results.map((item) => ({ ...item, media_type: "movie" })),
     ...tvShows.results.map((item) => ({ ...item, media_type: "tv" })),
-  ]
-    .sort((a, b) => b.popularity - a.popularity)
-    .slice(0, 20);
+  ].sort((a, b) => b.vote_average - a.vote_average);
 
-  const updatedResults = await Promise.all(
-    combinedResults.map(async (item) => {
-      const { runtime, number_of_episodes, status } = await fetchMediaDetails(
-        item
-      );
-
-      return {
-        id: item.id,
-        media_type: item.media_type,
-        release_date: item.release_date,
-        first_air_date: item.first_air_date,
-        poster_path: item.poster_path,
-        vote_average: item.vote_average,
-        runtime,
-        number_of_episodes,
-        status,
-      };
-    })
-  );
+  const updatedResults = generateUpdatedResults(combinedResults);
 
   return updatedResults;
 }
@@ -117,29 +108,9 @@ export async function getTopRated() {
   const combinedResults = [
     ...movies.results.map((item) => ({ ...item, media_type: "movie" })),
     ...tvShows.results.map((item) => ({ ...item, media_type: "tv" })),
-  ]
-    .sort(sortMedia)
-    .slice(0, 20);
+  ].sort(sortMedia);
 
-  const updatedResults = await Promise.all(
-    combinedResults.map(async (item) => {
-      const { runtime, number_of_episodes, status } = await fetchMediaDetails(
-        item
-      );
-
-      return {
-        id: item.id,
-        media_type: item.media_type,
-        release_date: item.release_date,
-        first_air_date: item.first_air_date,
-        poster_path: item.poster_path,
-        vote_average: item.vote_average,
-        runtime,
-        number_of_episodes,
-        status,
-      };
-    })
-  );
+  const updatedResults = generateUpdatedResults(combinedResults);
 
   return updatedResults;
 }

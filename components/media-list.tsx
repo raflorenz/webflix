@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import Media from "@/components/media";
 
-export default function MediaList({ mediaList }) {
+export default function MediaList({ mediaList, heading }) {
   const scrollRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -39,17 +39,20 @@ export default function MediaList({ mediaList }) {
   }, []);
 
   return (
-    <div
-      className="media-list grid grid-rows-2 grid-flow-col gap-2 pb-2 mb-16 overflow-x-auto"
-      ref={scrollRef}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onMouseMove={handleMouseMove}
-      onDragStart={(e) => e.preventDefault()}
-    >
-      {mediaList.map((media, index) => (
-        <Media key={`${media.id}-${index}`} media={media} />
-      ))}
-    </div>
+    <>
+      <h2 className="mt-16 mb-8 text-4xl text-[#e50914]">{heading}</h2>
+      <div
+        className="media-list grid grid-rows-2 grid-flow-col gap-2 pb-2 mb-16 overflow-x-auto"
+        ref={scrollRef}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onMouseMove={handleMouseMove}
+        onDragStart={(e) => e.preventDefault()}
+      >
+        {mediaList.map((media, index) => (
+          <Media key={`${media.id}-${index}`} media={media} />
+        ))}
+      </div>
+    </>
   );
 }

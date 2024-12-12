@@ -11,28 +11,26 @@ export default async function Home() {
   return (
     <div className="container mx-auto px-8">
       <h1 className="my-8 text-6xl text-[#e50914] uppercase">Webflix</h1>
-
-      <h2 className="mt-16 mb-8 text-4xl text-[#e50914]">Trending Now</h2>
       <Suspense fallback={<MediaListSkeleton />}>
-        <TrendingMediaList promise={trendingPromise} />
-      </Suspense>
-
-      <h2 className="mt-16 mb-8 text-4xl text-[#e50914]">Popular</h2>
-      <Suspense fallback={<MediaListSkeleton />}>
-        <PopularMediaList promise={popularPromise} />
-      </Suspense>
-
-      <h2 className="mt-16 mb-8 text-4xl text-[#e50914]">Top Rated</h2>
-      <Suspense fallback={<MediaListSkeleton />}>
-        <TopRatedMediaList promise={topRatedPromise} />
+        <SuspenseMediaList promise={trendingPromise} heading="Trending Now" />
+        <SuspenseMediaList promise={popularPromise} heading="Popular" />
+        <SuspenseMediaList promise={topRatedPromise} heading="Top Rated" />
       </Suspense>
     </div>
   );
 }
 
+async function SuspenseMediaList({ promise, heading }) {
+  const data = await promise;
+  return <MediaList mediaList={data} heading={heading} />;
+}
+
 function MediaListSkeleton() {
   return (
     <div className="space-y-4">
+      <h2 className="mt-16 mb-8 text-4xl text-[#e50914]">
+        Loading movies and tv shows from TMDB...
+      </h2>
       <div className="grid grid-rows-2 grid-flow-col gap-2 pb-2 mb-16 overflow-x-auto">
         {Array.from({ length: 12 }).map((_, index) => (
           <Skeleton key={index} className="aspect-[2/3] w-[235px]" />
@@ -40,19 +38,4 @@ function MediaListSkeleton() {
       </div>
     </div>
   );
-}
-
-async function TrendingMediaList({ promise }) {
-  const trending = await promise;
-  return <MediaList mediaList={trending} />;
-}
-
-async function PopularMediaList({ promise }) {
-  const popular = await promise;
-  return <MediaList mediaList={popular} />;
-}
-
-async function TopRatedMediaList({ promise }) {
-  const topRated = await promise;
-  return <MediaList mediaList={topRated} />;
 }
