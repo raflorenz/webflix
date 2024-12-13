@@ -1,3 +1,5 @@
+import { unstable_cacheLife as cacheLife } from "next/cache";
+
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 
@@ -55,6 +57,9 @@ async function generateUpdatedResults(results) {
 }
 
 export async function getTrending() {
+  "use cache";
+  cacheLife("minutes");
+
   const [page1, page2] = await Promise.all([
     fetchMedia("/trending/all/day?page=1"),
     fetchMedia("/trending/all/day?page=2"),
@@ -68,6 +73,9 @@ export async function getTrending() {
 }
 
 export async function getPopular() {
+  "use cache";
+  cacheLife("hours");
+
   const [movies, tvShows] = await Promise.all([
     fetchMedia("/movie/popular"),
     fetchMedia("/tv/popular"),
@@ -84,6 +92,9 @@ export async function getPopular() {
 }
 
 export async function getTopRated() {
+  "use cache";
+  cacheLife("days");
+
   const [movies, tvShows] = await Promise.all([
     fetchMedia("/movie/top_rated"),
     fetchMedia("/tv/top_rated"),
