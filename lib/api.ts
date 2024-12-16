@@ -42,6 +42,8 @@ async function generateUpdatedResults(results) {
       return {
         id: item.id,
         media_type: item.media_type,
+        title: item.title,
+        name: item.name,
         release_date: item.release_date,
         first_air_date: item.first_air_date,
         poster_path: item.poster_path,
