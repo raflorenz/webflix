@@ -38,6 +38,6 @@
         [&::-webkit-scrollbar-thumb]:border [&::-webkit-scrollbar-thumb]:border-gray-100;
 }
 
-.media > .info {
+.media .info {
   @apply absolute flex justify-center items-center h-[23px] p-1 rounded bg-[#e50914] font-medium text-xs leading-none text-white;
 }

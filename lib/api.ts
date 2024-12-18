@@ -18,11 +18,9 @@ async function fetchMedia(endpoint: string) {
   return response.json();
 }
 
-async function fetchMediaDetails(media) {
-  const mediaType = media.release_date ? "movie" : "tv";
-
+export async function fetchMediaDetails(media) {
   try {
-    const data = await fetchMedia(`/${mediaType}/${media.id}`);
+    const data = await fetchMedia(`/${media.media_type}/${media.id}`);
 
     return data;
   } catch (error) {
