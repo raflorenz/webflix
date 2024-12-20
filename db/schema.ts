@@ -1,7 +1,8 @@
-import { pgTable, serial, text, integer, numeric } from "drizzle-orm/pg-core";
+import { pgTable, text, integer, numeric } from "drizzle-orm/pg-core";
 
-export const media = pgTable("media", {
-  id: serial().primaryKey(),
+export const mediaTable = pgTable("media", {
+  id: integer().primaryKey().notNull(),
+  media_type: text(),
   title: text(),
   name: text(),
   poster_path: text(),
