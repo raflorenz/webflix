@@ -1,21 +1,15 @@
 import { db } from "@/db";
 import { mediaTable } from "@/db/schema";
-import Link from "next/link";
+// import Link from "next/link";
 import { Suspense } from "react";
 import MediaList from "@/components/media-list";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default async function Home() {
   return (
-    <div className="container mx-auto px-8">
-      <div className="flex justify-between items-center">
-        <h1 className="my-8 text-6xl text-[#e50914] uppercase">Webflix</h1>
-        <Link href="/discover">Discover</Link>
-      </div>
-      <Suspense fallback={<WatchedListSkeleton />}>
-        <WatchedList />
-      </Suspense>
-    </div>
+    <Suspense fallback={<WatchedListSkeleton />}>
+      <WatchedList />
+    </Suspense>
   );
 }
 

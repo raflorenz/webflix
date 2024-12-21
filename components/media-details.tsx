@@ -12,12 +12,12 @@ export default async function MediaDetails({ params }) {
   const details = await fetchMediaDetails({ id, media_type });
 
   return (
-    <div className="container mx-auto px-8">
+    <>
       <h1 className="my-8 text-6xl text-[#e50914] uppercase">
         {details.title || details.name}
       </h1>
       <p>{details.overview}</p>
       <ButtonAddToWatchedList media={{ ...details, media_type }} />
-    </div>
+    </>
   );
 }

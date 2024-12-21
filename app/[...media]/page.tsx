@@ -12,9 +12,9 @@ export default async function Page({ params }) {
 
 function MediaDetailsSkeleton() {
   return (
-    <div className="container mx-auto px-8">
+    <>
       <Skeleton className="h-10 w-[50%] my-8" />
       <Skeleton className="h-40 w-full" />
-    </div>
+    </>
   );
 }

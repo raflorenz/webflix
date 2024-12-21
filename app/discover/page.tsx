@@ -9,14 +9,11 @@ export default async function Page() {
   const topRatedPromise = getTopRated();
 
   return (
-    <div className="container mx-auto px-8">
-      <h1 className="my-8 text-6xl text-[#e50914] uppercase">Webflix</h1>
-      <Suspense fallback={<MediaListSkeleton />}>
-        <SuspenseMediaList promise={trendingPromise} heading="Trending Now" />
-        <SuspenseMediaList promise={popularPromise} heading="Popular" />
-        <SuspenseMediaList promise={topRatedPromise} heading="Top Rated" />
-      </Suspense>
-    </div>
+    <Suspense fallback={<MediaListSkeleton />}>
+      <SuspenseMediaList promise={trendingPromise} heading="Trending Now" />
+      <SuspenseMediaList promise={popularPromise} heading="Popular" />
+      <SuspenseMediaList promise={topRatedPromise} heading="Top Rated" />
+    </Suspense>
   );
 }
 
