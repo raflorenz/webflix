@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { formatDate, formatRuntime, slugify } from "@/lib/utils";
-import { Star, Film, TvMinimal } from "lucide-react";
+import { Star, Film, TvMinimal, Eye } from "lucide-react";
 
 export default function Media({ media }) {
   return (
@@ -42,6 +42,11 @@ export default function Media({ media }) {
           {media.first_air_date &&
             (media.status === "Ended" ? " (Ended)" : " (Ongoing)")}
         </div>
+        {media.watched && (
+          <div className="info bottom-2 right-2">
+            <Eye size={15} />
+          </div>
+        )}
       </Link>
     </div>
   );
