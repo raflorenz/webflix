@@ -15,13 +15,29 @@ export default async function MediaDetails({ params }) {
 
   return (
     <>
-      <h1 className="my-8 text-6xl text-[#e50914] uppercase">
-        {details.title || details.name}
-      </h1>
-      <p>{details.overview}</p>
-      {!watched && (
-        <ButtonAddToWatchedList media={{ ...details, media_type }} />
-      )}
+      <section
+        className="relative flex gap-8 min-h-[600px] bg-gray-200 bg-cover"
+        style={{
+          backgroundImage: details.backdrop_path
+            ? `url(https://image.tmdb.org/t/p/w1280${details.backdrop_path})`
+            : undefined,
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+        <div className="absolute bottom-0 left-0 p-8 text-white">
+          <h1 className="mb-4 text-[40px] text-[#e50914] uppercase">
+            {details.title || details.name}
+          </h1>
+          {!watched && (
+            <ButtonAddToWatchedList media={{ ...details, media_type }} />
+          )}
+          {details.tagline && (
+            <h3 className="mb-4 text-xl italic">{details.tagline}</h3>
+          )}
+          <h3 className="mb-2 text-xl">Overview</h3>
+          <p className="text-lg">{details.overview}</p>
+        </div>
+      </section>
     </>
   );
 }
