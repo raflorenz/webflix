@@ -2,6 +2,7 @@
 
 import { db } from "@/db";
 import { mediaTable } from "@/db/schema";
+import { revalidateTag } from "next/cache";
 
 export async function addToWatchedList(media) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -22,6 +23,8 @@ export async function addToWatchedList(media) {
       runtime: media.runtime,
       status: media.status,
     });
+
+    revalidateTag("media-details");
 
     return {
       success: true,

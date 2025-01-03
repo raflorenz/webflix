@@ -1,10 +1,14 @@
-import { unstable_cacheLife as cacheLife } from "next/cache";
+import {
+  unstable_cacheLife as cacheLife,
+  unstable_cacheTag as cacheTag,
+} from "next/cache";
 import { fetchMediaDetails, getWatchedListIds } from "@/lib/api";
 import ButtonAddToWatchedList from "./button-add-to-watched-list";
 
 export default async function MediaDetails({ params }) {
   "use cache";
   cacheLife("hours");
+  cacheTag("media-details");
 
   const id = (await params).media[1];
   const media_type = (await params).media[0];
