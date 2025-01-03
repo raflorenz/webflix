@@ -10,6 +10,7 @@
     "migrate": "ts-node --esm --project tsconfig.json db/migrate.ts"
   },
   "dependencies": {
+    "@radix-ui/react-toast": "^1.2.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Link from "next/link";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Webflix",
@@ -23,6 +24,7 @@ export default function RootLayout({
           </header>
           <main>{children}</main>
         </div>
+        <Toaster />
       </body>
     </html>
   );
